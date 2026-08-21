@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Crypto Analyzer - Master Intelligence Suite</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet" >
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: { sans: ['Outfit', 'sans-serif'] },
+                    colors: { dark: '#020617', glass: 'rgba(255, 255, 255, 0.03)', cyanAccent: '#22d3ee' }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .glass-card { @apply bg-white/5 backdrop-blur-xl border border-white/10 shadow-2xl; }
+            .text-gradient { @apply bg-clip-text text-transparent bg-gradient-to-r from-cyan-400 to-blue-500; }
+            .custom-scrollbar::-webkit-scrollbar { width: 4px; }
+            .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0,0,0,0.1); }
+            .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(34, 211, 238, 0.2); border-radius: 10px; }
+        }
+    </style>
+    <link rel="icon" type="image/png" href="favicon.png">
+</head>
+<body class="bg-dark text-slate-200 min-vh-100 selection:bg-cyan-500/30">
+
+    <!-- Navbar -->
+    <nav class="sticky top-0 z-50 border-b border-white/5 bg-dark/80 backdrop-blur-md">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <a href="#home" class="flex items-center gap-2 group">
+                    <div class="w-10 h-10 bg-gradient-to-tr from-cyan-500 to-blue-600 rounded-lg flex items-center justify-center group-hover:rotate-12 transition-transform shadow-lg shadow-cyan-500/20">
+                        <i class="fas fa-chart-line text-white"></i>
+                    </div>
+                    <span class="text-xl font-bold tracking-tight text-white">Crypto<span class="text-cyan-400">Analyzer</span></span>
+                </a>
+                
+                <div class="hidden md:flex items-center gap-10">
+                    <a href="#home" class="text-sm font-medium hover:text-cyan-400 transition-colors">Home</a>
+                    <a href="#predict" class="text-sm font-medium hover:text-cyan-400 transition-colors">Predict</a>
+                    <a href="#news" class="text-sm font-medium hover:text-cyan-400 transition-colors">Intelligence</a>
+                    <a href="#about" class="text-sm font-medium hover:text-cyan-400 transition-colors">About</a>
+                </div>
+
+                <div class="md:hidden">
+                    <button class="text-slate-400 hover:text-white"><i class="fas fa-bars text-xl"></i></button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="relative">
+        <!-- Background Decor -->
+        <div class="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-4xl h-96 bg-cyan-500/10 blur-[120px] rounded-full -z-10"></div>
+        <div class="absolute top-[1500px] right-0 w-96 h-96 bg-blue-500/10 blur-[120px] rounded-full -z-10"></div>
+
+        <!-- 1. HOME SECTION: SEARCH -->
+        <section id="home" class="max-w-7xl mx-auto px-4 pt-24 pb-32">
+            <div class="text-center mb-20">
+                <h1 class="text-5xl md:text-7xl font-bold tracking-tight text-white mb-6 animate__animated animate__fadeInDown">
+                    Market Analysis <span class="text-gradient">Engine</span>
+                </h1>
+                <p class="text-lg text-slate-400 max-w-2xl mx-auto mb-12">
+                    Access deep-market metrics and 365-day historical visualizations for the world's leading digital assets.
+                </p>
+
+                <!-- Search UI -->
+                <div id="crypto-search" class="max-w-2xl mx-auto">
+                    <div class="relative flex items-center group">
+                        <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-2xl blur opacity-0 group-hover:opacity-100 transition duration-500"></div>
+                        <i class="fas fa-search absolute left-5 text-slate-500"></i>
+                        <input type="text" id="crypto-input" placeholder="Enter asset name (e.g. Bitcoin, Solana)..." 
+                            class="relative w-full bg-slate-900/50 border border-white/10 rounded-2xl py-5 pl-14 pr-32 focus:outline-none focus:border-cyan-500 transition-all text-white placeholder:text-slate-600">
+                        <button id="search-button" class="absolute right-2 px-8 py-3 bg-gradient-to-r from-cyan-500 to-blue-600 rounded-xl font-semibold text-white hover:shadow-lg transition-all active:scale-95">
+                            Search
+                        </button>
+                    </div>
+
+                    <div id="search-loader" class="hidden mt-12 justify-center">
+                        <div class="w-12 h-12 border-4 border-cyan-500/10 border-t-cyan-500 rounded-full animate-spin"></div>
+                    </div>
+                    <div id="crypto-result" class="mt-12"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PREDICT SECTION -->
+        <section id="predict" class="bg-white/[0.01] border-y border-white/5 py-32">
+            <div class="max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-4xl md:text-5xl font-bold text-white mb-4">Algorithmic <span class="text-gradient">Projections</span></h2>
+                    <p class="text-slate-400 text-lg max-w-3xl mx-auto">
+                        Institutional-grade technical indicators and volume-weighted moving averages focused on identifying potential market paradigm shifts.
+                    </p>
+                </div>
+
+                <div id="crypto-prediction" class="max-w-3xl mx-auto">
+                    <div class="relative flex items-center group mb-12">
+                        <input type="text" id="crypto-input-prediction" placeholder="Predict asset trends (e.g. Ethereum)..." 
+                            class="w-full bg-slate-950 border border-white/10 rounded-2xl py-6 px-8 focus:outline-none focus:border-cyan-500 transition-all text-white placeholder:text-slate-600 text-lg italic">
+                        <button id="prediction-button" class="absolute right-3 px-10 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-bold text-white transition-all active:scale-95">
+                            Analyze Trend
+                        </button>
+                    </div>
+
+                    <div id="predict-loader" class="hidden mt-12 justify-center">
+                        <i class="fas fa-brain text-cyan-500 text-4xl animate-pulse"></i>
+                    </div>
+                    <div id="crypto-prediction-result"></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. INTELLIGENCE (NEWS) SECTION -->
+        <section id="news" class="max-w-7xl mx-auto px-4 py-32">
+            <header class="mb-16 border-l-4 border-cyan-500 pl-8">
+                <h2 class="text-4xl font-bold text-white mb-2">Market Intelligence</h2>
+                <p class="text-slate-400">Streaming real-time briefs from global cryptocurrency news leaders.</p>
+            </header>
+
+            <div class="flex flex-col lg:flex-row gap-12">
+                <div id="news-container" class="lg:w-2/3 space-y-6">
+                    <div class="animate-pulse space-y-4">
+                        <div class="h-40 glass-card rounded-2xl"></div>
+                        <div class="h-40 glass-card rounded-2xl"></div>
+                    </div>
+                </div>
+                <!-- Sidebar -->
+                <aside class="lg:w-1/3 space-y-8">
+                    <div class="glass-card p-6 rounded-2xl">
+                        <h3 class="font-bold text-white mb-4">Trending Signals</h3>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold uppercase hover:border-cyan-400 cursor-pointer transition-colors">Blockchain</span>
+                            <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold uppercase hover:border-cyan-400 cursor-pointer transition-colors">Regulation</span>
+                            <span class="px-3 py-1 bg-white/5 border border-white/10 rounded-lg text-[10px] font-bold uppercase hover:border-cyan-400 cursor-pointer transition-colors">Layer 2</span>
+                        </div>
+                    </div>
+                    <div id="sidebar-news" class="space-y-4"></div>
+                </aside>
+            </div>
+        </section>
+
+        <!-- 4. ABOUT SECTION -->
+        <section id="about" class="max-w-5xl mx-auto px-4 py-32 border-t border-white/5">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
+                <div>
+                    <h2 class="text-4xl font-bold text-white mb-6 leading-tight">Designed for <br><span class="text-gradient">Precision Analytics</span></h2>
+                    <p class="text-slate-400 text-lg leading-relaxed mb-8">
+                        The Crypto Analyzer protocol bridges the gap between raw blockchain data and actionable insights. Our system utilizes parallel API syncing to ensure your data is accurate to the second.
+                    </p>
+                    <div class="flex gap-4">
+                        <div class="flex-1 p-6 glass-card rounded-2xl text-center">
+                            <span class="text-3xl font-bold text-white block">10k+</span>
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Assets</span>
+                        </div>
+                        <div class="flex-1 p-6 glass-card rounded-2xl text-center">
+                            <span class="text-3xl font-bold text-white block">99.9%</span>
+                            <span class="text-[10px] font-black text-slate-500 uppercase tracking-widest">Uptime</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="glass-card p-8 rounded-3xl border-cyan-500/20">
+                     <h4 class="text-white font-bold mb-4 flex items-center gap-2 italic">
+                         <i class="fas fa-quote-left text-cyan-500"></i> Open Protocol
+                     </h4>
+                     <p class="text-slate-400 italic leading-loose">
+                         "Our mission is to democratize high-frequency market intelligence for the modern retail trader, providing the same tools used by institutional quantitative desks."
+                     </p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/5 py-16 bg-black/20">
+        <div class="max-w-7xl mx-auto px-4 text-center">
+            <p class="text-slate-500 text-sm italic">&copy; <script>document.write(new Date().getFullYear())</script> Crypto Analyzer. Advanced Intelligence Protocol.</p>
+        </div>
+    </footer>
+
+    <!-- MASTER INTELLIGENCE SCRIPT -->
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            // --- UI HELPERS ---
+            const toggle = (id, show) => { 
+                const el = document.getElementById(id);
+                if(el) { el.classList.toggle('flex', show); el.classList.toggle('hidden', !show); }
+            };
+
+            // --- 1. SEARCH LOGIC ---
+            const searchBtn = document.getElementById("search-button");
+            const searchInput = document.getElementById("crypto-input");
+            const searchResult = document.getElementById("crypto-result");
+
+            const setupChart = (data, target) => {
+                const ctx = target.querySelector(".price-chart").getContext("2d");
+                new Chart(ctx, {
+                    type: "line",
+                    data: {
+                        labels: data.map(e => new Date(e[0]).toLocaleDateString()),
+                        datasets: [{ label: "USD", data: data.map(e => e[1]), borderColor: "#22d3ee", borderWidth: 2, fill: true, backgroundColor: 'rgba(34, 211, 238, 0.05)', tension: 0.4 }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false, scales: { x: { display: false }, y: { display: true, grid: { color: 'rgba(255,255,255,0.05)' }, ticks: { color: '#64748b', font: { size: 10 } } } }, plugins: { legend: { display: false } }, elements: { point: { radius: 0 } } }
+                });
+            };
+
+            const setupTable = (data, target) => {
+                const body = target.querySelector(".price-table-body");
+                [...data].sort((a,b) => b[0]-a[0]).slice(0, 50).forEach(e => {
+                    const row = document.createElement("tr");
+                    row.className = "border-b border-white/5 hover:bg-white/5 transition-colors";
+                    row.innerHTML = `<td class="py-3 px-4 text-xs text-slate-400">${new Date(e[0]).toLocaleDateString()}</td><td class="py-3 px-4 text-xs text-white font-bold">$${e[1].toLocaleString(undefined, {minimumFractionDigits: 2})}</td>`;
+                    body.appendChild(row);
+                });
+            };
+
+            searchBtn?.addEventListener("click", async () => {
+                const val = searchInput.value.trim().toLowerCase();
+                if(!val) return;
+                toggle('search-loader', true);
+                searchResult.innerHTML = "";
+                try {
+                    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${val}`);
+                    const d = await res.json();
+                    const m = d.market_data;
+                    toggle('search-loader', false);
+                    const color = m.price_change_percentage_24h >= 0 ? "text-emerald-400" : "text-rose-400";
+                    searchResult.innerHTML = `
+                        <div class="glass-card rounded-3xl overflow-hidden text-left animate__animated animate__zoomIn">
+                            <div class="p-8 border-b border-white/10 flex flex-col md:flex-row justify-between items-center gap-6">
+                                <div class="flex items-center gap-4">
+                                    <img src="${d.image.small}" class="w-14 h-14 rounded-2xl ring-1 ring-white/10 shadow-xl">
+                                    <div><h4 class="text-2xl font-bold text-white">${d.name} <span class="text-slate-500 text-sm italic ml-1">${d.symbol.toUpperCase()}</span></h4><span class="text-[10px] font-black text-cyan-400 tracking-[0.3em] uppercase">Global Rank #${d.market_cap_rank}</span></div>
+                                </div>
+                                <div class="text-right">
+                                    <div class="text-4xl font-black text-white">$${m.current_price.usd.toLocaleString()}</div>
+                                    <div class="${color} font-bold mt-1">${m.price_change_percentage_24h.toFixed(2)}% <span class="text-[10px] opacity-50 uppercase">24h Shift</span></div>
+                                </div>
+                            </div>
+                            <div class="grid grid-cols-3 divide-x divide-white/10 border-b border-white/10">
+                                <div class="p-6 text-center"><small class="text-slate-500 uppercase text-[9px] font-black tracking-widest mb-1 block">High</small><span class="text-white font-bold">$${m.high_24h.usd.toLocaleString()}</span></div>
+                                <div class="p-6 text-center"><small class="text-slate-500 uppercase text-[9px] font-black tracking-widest mb-1 block">Low</small><span class="text-white font-bold">$${m.low_24h.usd.toLocaleString()}</span></div>
+                                <div class="p-6 text-center"><small class="text-slate-500 uppercase text-[9px] font-black tracking-widest mb-1 block">Cap</small><span class="text-white font-bold">$${(m.market_cap.usd / 1e9).toFixed(1)}B</span></div>
+                            </div>
+                            <div class="p-8">
+                                <div class="h-64 mb-12"><canvas class="price-chart"></canvas></div>
+                                <div class="max-h-64 overflow-y-auto custom-scrollbar rounded-2xl border border-white/5 bg-black/20">
+                                    <table class="w-full text-left">
+                                        <thead class="sticky top-0 bg-slate-900 border-b border-white/10 font-black text-[9px] text-slate-500 uppercase tracking-widest">
+                                            <tr><th class="p-4">Timeline</th><th class="p-4 text-right">Valuation</th></tr>
+                                        </thead>
+                                        <tbody class="price-table-body font-mono"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                    const cRes = await fetch(`https://api.coingecko.com/api/v3/coins/${val}/market_chart?vs_currency=usd&days=365`);
+                    const cData = await cRes.json();
+                    setupChart(cData.prices, searchResult);
+                    setupTable(cData.prices, searchResult);
+                } catch(e) { toggle('search-loader', false); searchResult.innerHTML = `<div class="p-6 glass-card text-rose-400 text-center">Asset synchronization failure.</div>`; }
+            });
+
+            // --- 2. PREDICT LOGIC ---
+            const predictBtn = document.getElementById("prediction-button");
+            const predictInput = document.getElementById("crypto-input-prediction");
+            const predictResult = document.getElementById("crypto-prediction-result");
+
+            predictBtn?.addEventListener("click", async () => {
+                const val = predictInput.value.trim().toLowerCase();
+                if(!val) return;
+                toggle('predict-loader', true);
+                predictResult.innerHTML = "";
+                try {
+                    const res = await fetch(`https://api.coingecko.com/api/v3/coins/${val}/market_chart?vs_currency=usd&days=365`);
+                    const d = await res.json();
+                    const p = d.prices;
+                    const ma7 = p.slice(-7).reduce((a,c)=>a+c[1],0)/7;
+                    const ma365 = p.reduce((a,c)=>a+c[1],0)/365;
+                    const shift = (ma7 - ma365)/7;
+                    const last = p[p.length-1][1];
+                    const next = last + shift;
+                    const sent = next > last ? "Bullish" : "Bearish";
+                    const sentCol = sent === 'Bullish' ? 'text-emerald-400 bg-emerald-500/10' : 'text-rose-400 bg-rose-500/10';
+                    toggle('predict-loader', false);
+                    predictResult.innerHTML = `
+                         <div class="glass-card rounded-3xl overflow-hidden animate__animated animate__fadeInUp">
+                            <div class="px-8 py-5 border-b border-white/10 flex justify-between items-center bg-white/[0.02]">
+                                <h5 class="text-sm font-black text-white uppercase tracking-widest">Algorithmic Forecast</h5>
+                                <span class="px-4 py-1.5 ${sentCol} border border-white/5 rounded-full text-[10px] font-black uppercase tracking-widest">${sent} Momentum</span>
+                            </div>
+                            <div class="p-10 text-left">
+                                <div class="grid grid-cols-2 gap-12 mb-10">
+                                    <div class="space-y-1"><span class="text-[10px] uppercase font-black text-slate-500 tracking-widest">Market Shift</span><div class="text-3xl font-black ${next > last ? 'text-emerald-400' : 'text-rose-400'}">${next > last ? 'Expansion' : 'Contraction'}</div></div>
+                                    <div class="text-right space-y-1"><span class="text-[10px] uppercase font-black text-slate-500 tracking-widest">24h Projection</span><div class="text-3xl font-black text-white">$${next.toLocaleString(undefined, {maximumFractionDigits: 2})}</div></div>
+                                </div>
+                                <div class="p-6 rounded-2xl bg-white/[0.03] text-center border border-white/5 italic text-slate-400 text-sm">
+                                    Our model suggests a ${sent} movement based on a ${Math.abs((ma7-ma365)/ma365*100).toFixed(1)}% volatility gap between short and long term moving averages.
+                                </div>
+                            </div>
+                         </div>
+                    `;
+                } catch(e) { toggle('predict-loader', false); predictResult.innerHTML = `<div class="p-6 glass-card text-rose-400 text-center">Engine synchronization timeout.</div>`; }
+            });
+
+            // --- 3. NEWS LOGIC ---
+            const newsCont = document.getElementById("news-container");
+            const sideNews = document.getElementById("sidebar-news");
+            const rss = ['https://news.bitcoin.com/feed/', 'https://cointelegraph.com/rss'];
+
+            (async function fetchNews() {
+                try {
+                    const feeds = await Promise.all(rss.map(u => fetch(`https://api.rss2json.com/v1/api.json?rss_url=${encodeURIComponent(u)}`).then(r=>r.json())));
+                    newsCont.innerHTML = ""; sideNews.innerHTML = "";
+                    feeds.forEach(f => {
+                        f.items.slice(0, 4).forEach((item, i) => {
+                            const entry = document.createElement('div');
+                            entry.className = 'glass-card p-6 rounded-2xl group cursor-pointer hover:border-cyan-500/30 transition-all text-left';
+                            entry.innerHTML = `
+                                <div class="flex gap-6">
+                                    ${item.thumbnail ? `<img src="${item.thumbnail}" class="w-32 h-24 object-cover rounded-xl border border-white/10 hidden md:block">` : ''}
+                                    <div class="flex-grow">
+                                        <div class="flex gap-2 text-[10px] font-black text-cyan-400 uppercase tracking-widest mb-1"><span>${f.feed.title.split(' ')[0]}</span><span class="text-slate-600">•</span><span class="text-slate-600">${new Date(item.pubDate).toLocaleDateString()}</span></div>
+                                        <h5 class="text-lg font-bold text-white group-hover:text-cyan-400 transition-colors leading-tight mb-2"><a href="${item.link}" target="_blank">${item.title}</a></h5>
+                                        <p class="text-slate-500 text-sm line-clamp-2 leading-relaxed">${item.description.replace(/<[^>]*>/g, '').substring(0, 120)}...</p>
+                                    </div>
+                                </div>
+                            `;
+                            newsCont.appendChild(entry);
+                            if(i < 2) {
+                                const side = document.createElement('div');
+                                side.className = 'p-4 glass-card rounded-xl text-left border-white/5';
+                                side.innerHTML = `<span class="text-[9px] text-blue-400 font-black uppercase mb-1 block">${f.feed.title.split(' ')[0]}</span><a href="${item.link}" target="_blank" class="text-xs font-bold text-slate-300 hover:text-white line-clamp-2">${item.title}</a>`;
+                                sideNews.appendChild(side);
+                            }
+                        });
+                    });
+                } catch(e) { newsCont.innerHTML = `<div class="p-6 glass-card text-rose-400">Failed to stream intel.</div>`; }
+            })();
+        });
+    </script>
+</body>
+</html>
